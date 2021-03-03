@@ -1,20 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import {Text, View, StyleSheet, ImageBackground, Image, Button, TouchableOpacity} from "react-native";
+import {Text, View, StyleSheet, Image, TouchableOpacity, SafeAreaView} from "react-native";
 import { useNavigation } from "@react-navigation/core";
+import axios from 'axios';
+import { useRoute } from '@react-navigation/native';
 
 //Components
 import Scan from "../components/Scan";
+import { ScrollView } from 'react-native-gesture-handler';
 
 const ProductScreen = (props) => {
     const [data, setData] = useState("");
     const [info, setInfo] = useState("");
     const navigation = useNavigation();
+    const [isLoading, setIsLoading] = useState(true);
+    const route = useRoute();
 
     return(
-    <View style={styles.container}>
-        <Image style={styles.image} source={require('../assets/home00Icon.png')}></Image>
-        {/* <Scan/> */}
-    </View>
+      <SafeAreaView style={styles.container}>
+          <Image style={styles.image} source={require('../assets/home00Icon.png')}/>
+          <Scan/>
+      </SafeAreaView>
         )
       }
       
@@ -27,46 +32,14 @@ const styles = StyleSheet.create({
       backgroundColor: "white"
     },
     image: {
-      height: "100%",
+      height: "93%",
       width: "100%",
       resizeMode: "contain",
-      zIndex: 0,
-      position: "absolute",
-    },
-    button:{
-      alignItems: "center",
-      backgroundColor: "red",
-      padding: 10,
-      borderRadius:10,
-      width: 200,
-      zIndex: 1,
-    },
-    content_scan:{
-      alignItems: "center", 
-      marginTop: 350,
-      backgroundColor: "white",
-      borderRadius:10,
-      position: "absolute",
-      marginTop: "140%",
-      marginLeft: "80%",
-      zIndex: 1,
-    },
-    scan:{
-      backgroundColor: "rgb(80, 196, 130)",
-      alignItems: "center",
-      justifyContent: "center",
-      borderRadius:50,
-      height: 50,
-      width: 50,
     },
   });
   
   
   
-//{/* <Icon.Button name="carrot"  solid>
-//Login with Facebook
-//</Icon.Button> */}
-
 {/* <View style={{alignItems: "center", marginTop: 350}}>
   <TouchableOpacity style={styles.button} 
     onPress={() =>
@@ -75,3 +48,11 @@ const styles = StyleSheet.create({
     <Text>test props product info</Text>
   </TouchableOpacity> 
 </View> */}
+{/* 
+// button:{
+//   alignItems: "center",
+//   backgroundColor: "red",
+//   padding: 10,
+//   borderRadius:10,
+//   width: 200,
+// }, */}

@@ -68,21 +68,31 @@ function App() {
             )}
           </Stack.Screen>
 
+          <Stack.Screen name="ProductScreen">
+              {(props) => <ProductScreen {...props} test={test} />}
+          </Stack.Screen>
+
           <Stack.Screen name="ProductInfo">
               {(props) => <ProductInfoScreen {...props} test={test} />}
           </Stack.Screen>
 
-
-          <Stack.Screen name="ScanScreen">
+          <Stack.Screen name="ScanScreen"
+          //  component={ScanScreen}
+          options={{
+            title: 'Scanner votre produit',
+            headerStyle: {
+              backgroundColor: 'black',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}>
               {(props) => <ScanScreen {...props} test={test} />}
           </Stack.Screen>
-      </Stack.Navigator>   
-      
-
-      {/*Components Scan.js*/}
-      <Scan/>
-    
+      </Stack.Navigator>    
     </NavigationContainer>
+    
   );
 }
 
@@ -92,22 +102,5 @@ const styles = StyleSheet.create({
   tabbar: {
     marginTop: 25,
   },
-  content_scan:{
-    zIndex: 1,
-    height: "100%",
-    position: "absolute",
-    alignSelf: "flex-end",
-    justifyContent: "flex-end",
-    borderRadius:10,
-    paddingRight: 10,
-    paddingBottom: 10,
-  },
-  scan:{
-    backgroundColor: "rgb(80, 196, 130)",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius:50,
-    height: 50,
-    width: 50,
-  },
+  
 });

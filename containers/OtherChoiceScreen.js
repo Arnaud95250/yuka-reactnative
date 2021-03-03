@@ -2,7 +2,7 @@ import React from 'react';
 import {Text, View, StyleSheet, Image} from "react-native";
 
 const OtherChoiceScreen = (props) => {
-    console.log(props);
+    // console.log(props);
     return(
       <View style={styles.container}>
         <Image style={styles.image} source={require('../assets/home01Icon.png')} ></Image>

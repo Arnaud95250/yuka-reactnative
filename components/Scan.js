@@ -20,14 +20,9 @@ export default Scan;
 
 const styles = StyleSheet.create({
     content_scan:{
-        zIndex: 1,
-        height: "100%",
         position: "absolute",
-        alignSelf: "flex-end",
-        justifyContent: "flex-end",
-        borderRadius:10,
-        paddingRight: 10,
-        paddingBottom: 10,
+        right: 20,
+        bottom: 20  
       },
       scan:{
         backgroundColor: "rgb(80, 196, 130)",
