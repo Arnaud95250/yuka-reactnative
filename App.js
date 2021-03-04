@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Button, TouchableOpacity  } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/core";
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
@@ -16,7 +17,6 @@ import colors from "./assets/colors";
 import { FontAwesome5 } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 //Components
 import Scan from "./components/Scan";
@@ -29,9 +29,9 @@ import StatisticalScreen from "./containers/StatisticalScreen";
 import ScanScreen from "./containers/ScanScreen";
 
 function App() {
-  const [test,setTest] = useState("test props");
-  // const navigation = useNavigation();
-  
+  const [infoData,setInfoData] = useState("test props");
+  const [test,setTest] = useState("test props");  
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Product">
@@ -88,7 +88,7 @@ function App() {
               fontWeight: 'bold',
             },
           }}>
-              {(props) => <ScanScreen {...props} test={test} />}
+              {(props) => <ScanScreen {...props}/>}
           </Stack.Screen>
       </Stack.Navigator>    
     </NavigationContainer>

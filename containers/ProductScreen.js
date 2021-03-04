@@ -1,24 +1,46 @@
 import React, { useState, useEffect } from 'react';
-import {Text, View, StyleSheet, Image, TouchableOpacity, SafeAreaView} from "react-native";
+import {Text, View, StyleSheet, Image, SafeAreaView} from "react-native";
 import { useNavigation } from "@react-navigation/core";
-import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
+import axios from 'axios';
 
 //Components
 import Scan from "../components/Scan";
-import { ScrollView } from 'react-native-gesture-handler';
 
 const ProductScreen = (props) => {
     const [data, setData] = useState("");
     const [info, setInfo] = useState("");
     const navigation = useNavigation();
     const [isLoading, setIsLoading] = useState(true);
-    const route = useRoute();
+    const params = useRoute();
+    // console.log(params);
+
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          // lancement de récupération des données depuis l'API et le produit scanné avec une requête axios en get
+          const response = await axios.get(`https://world.openfoodfacts.org/api/v0/product/${params.productScanned}.json`);
+            console.log("toto1");
+            console.log(response.data);
+            setData(response.data);
+            console.log("toto2");
+        } catch (err) {
+          console.log(err.message);
+        }
+      };
+      fetchData();
+    }, [params.productScanned]);
+
+
+
+
 
     return(
       <SafeAreaView style={styles.container}>
           <Image style={styles.image} source={require('../assets/home00Icon.png')}/>
           <Scan/>
+          {/* <Text>{data.product.code}</Text> */}
       </SafeAreaView>
         )
       }
