@@ -6,6 +6,10 @@ import axios from 'axios';
 
 //Components
 import Scan from "../components/Scan";
+import ContentInfoProduct from "../components/ContentInfoProduct";
+
+// Icon
+import { Entypo } from '@expo/vector-icons';
 
 const ProductScreen = (props) => {
     const [data, setData] = useState("");
@@ -14,17 +18,19 @@ const ProductScreen = (props) => {
     const [isLoading, setIsLoading] = useState(true);
     const params = useRoute();
     // console.log(params);
+    // console.log(props);
 
 
     useEffect(() => {
       const fetchData = async () => {
         try {
           // lancement de récupération des données depuis l'API et le produit scanné avec une requête axios en get
-          const response = await axios.get(`https://world.openfoodfacts.org/api/v0/product/${params.productScanned}.json`);
-            console.log("toto1");
+          const response = await axios.get(`https://world.openfoodfacts.org/api/v0/product/${props.route.params.productScanned}.json`);
+            // console.log("toto1");
             console.log(response.data);
             setData(response.data);
-            console.log("toto2");
+            setIsLoading(false);
+            // console.log("toto2");
         } catch (err) {
           console.log(err.message);
         }
@@ -38,9 +44,14 @@ const ProductScreen = (props) => {
 
     return(
       <SafeAreaView style={styles.container}>
+     {isLoading ?(
+       <View  style={styles.container}>
           <Image style={styles.image} source={require('../assets/home00Icon.png')}/>
           <Scan/>
-          {/* <Text>{data.product.code}</Text> */}
+       </View>
+       ) : ( 
+         <ContentInfoProduct data={data} />
+        )}
       </SafeAreaView>
         )
       }
@@ -51,13 +62,15 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       flexDirection: "column",
-      backgroundColor: "white"
+      backgroundColor: "white",
     },
     image: {
       height: "93%",
       width: "100%",
       resizeMode: "contain",
+      position: "absolute"
     },
+    
   });
   
   

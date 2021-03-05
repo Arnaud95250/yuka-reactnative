@@ -31,6 +31,25 @@ import ScanScreen from "./containers/ScanScreen";
 function App() {
   const [infoData,setInfoData] = useState("test props");
   const [test,setTest] = useState("test props");  
+  const [codeBar,setCodeBar] = useState();  
+  
+
+
+
+
+  const setCode = async (code) => {
+    if (code) {
+      AsyncStorage.setItem("codebar", code);
+      setCodeBar(code);
+    } else {
+      AsyncStorage.removeItem("codebar");
+      setCodeBar(null);
+    }
+  };
+
+
+
+
 
   return (
     <NavigationContainer>
@@ -51,6 +70,13 @@ function App() {
               }}>
                 
               {/*Onglet page Home (PRODUCT)*/}
+              {/* <Tab.Screen name="Product" 
+              children={(props)=><ProductScreen {...props} test={test}/>}
+                  options={{ tabBarIcon: ({ color, focused, size }) => (<FontAwesome5 name="carrot" size={24} color={color}/>)}}>
+                  {(props) => <ProductScreen {...props} test={test} />}
+              </Tab.Screen> */}
+
+              {/*Onglet page Home (PRODUCT)*/}
               <Tab.Screen name="Product" component={ProductScreen} 
                   options={{ tabBarIcon: ({ color, focused, size }) => (<FontAwesome5 name="carrot" size={24} color={color}/>)}}>
               </Tab.Screen>
@@ -69,8 +95,12 @@ function App() {
           </Stack.Screen>
 
           <Stack.Screen name="ProductScreen">
-              {(props) => <ProductScreen {...props} test={test} />}
+              {(props)=><ProductScreen {...props} setCode={setCode}/>}
           </Stack.Screen>
+
+          {/* <Stack.Screen name="ProductScreen">
+              {(props) => <ProductScreen {...props} test={test} />}
+          </Stack.Screen> */}
 
           <Stack.Screen name="ProductInfo">
               {(props) => <ProductInfoScreen {...props} test={test} />}
