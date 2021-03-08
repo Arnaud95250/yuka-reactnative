@@ -29,27 +29,19 @@ import StatisticalScreen from "./containers/StatisticalScreen";
 import ScanScreen from "./containers/ScanScreen";
 
 function App() {
-  const [infoData,setInfoData] = useState("test props");
   const [test,setTest] = useState("test props");  
-  const [codeBar,setCodeBar] = useState();  
-  
+  // const [codeBar,setCodeBar] = useState();
 
-
-
-
-  const setCode = async (code) => {
-    if (code) {
-      AsyncStorage.setItem("codebar", code);
-      setCodeBar(code);
-    } else {
-      AsyncStorage.removeItem("codebar");
-      setCodeBar(null);
-    }
-  };
-
-
-
-
+  // const setCode = async (data) => {
+  //   if (data) {
+  //     AsyncStorage.setItem("codebar", data);
+  //     setCodeBar(data);
+  //   } else {
+  //     AsyncStorage.removeItem("codebar");
+  //     setCodeBar(null);
+  //   }
+  //   // console.log(data);
+  // };
 
   return (
     <NavigationContainer>
@@ -57,29 +49,36 @@ function App() {
         <Stack.Screen name="Product" options={{ headerShown: false }}>
             {() => (
               <Tab.Navigator 
-              style={styles.tabbar} 
-              tabBarOptions={{
-                activeTintColor: 'white',
-                tabStyle:{width: 70, height: 50},
-                indicatorStyle:{backgroundColor: "white"} ,
-                showIcon: true,
-                showLabel: false,
-                style: {
-                  backgroundColor: 'rgb(80, 196, 130)',
-                }
-              }}>
+                style={styles.tabbar} 
+                tabBarOptions={{
+                  activeTintColor: 'white',
+                  tabStyle:{width: 70, height: 50},
+                  indicatorStyle:{backgroundColor: "white"} ,
+                  showIcon: true,
+                  showLabel: false,
+                  style: {
+                    backgroundColor: 'rgb(80, 196, 130)',
+                  }
+                }}>
                 
+              
               {/*Onglet page Home (PRODUCT)*/}
-              {/* <Tab.Screen name="Product" 
-              children={(props)=><ProductScreen {...props} test={test}/>}
+              <Tab.Screen name="Product"  
                   options={{ tabBarIcon: ({ color, focused, size }) => (<FontAwesome5 name="carrot" size={24} color={color}/>)}}>
-                  {(props) => <ProductScreen {...props} test={test} />}
-              </Tab.Screen> */}
+                    {() => (
+                    <Stack.Navigator>
+                      <Stack.Screen name="Product" options={{ title: '', headerStyle: { height:0 }}}>
+                        {(props) => <ProductScreen {...props} test={test} />}
+                      </Stack.Screen>
+                    </Stack.Navigator>
+                  )}
+              </Tab.Screen>
+
 
               {/*Onglet page Home (PRODUCT)*/}
-              <Tab.Screen name="Product" component={ProductScreen} 
+              {/* <Tab.Screen name="Product" component={ProductScreen} 
                   options={{ tabBarIcon: ({ color, focused, size }) => (<FontAwesome5 name="carrot" size={24} color={color}/>)}}>
-              </Tab.Screen>
+              </Tab.Screen> */}
 
               {/*Onglet page Other Choice*/}
               <Tab.Screen name="OtherChoice" component={OtherChoiceScreen} 
@@ -94,17 +93,17 @@ function App() {
             )}
           </Stack.Screen>
 
-          <Stack.Screen name="ProductScreen">
+          {/* <Stack.Screen name="ProductScreen">
               {(props)=><ProductScreen {...props} setCode={setCode}/>}
-          </Stack.Screen>
+          </Stack.Screen> */}
 
           {/* <Stack.Screen name="ProductScreen">
               {(props) => <ProductScreen {...props} test={test} />}
           </Stack.Screen> */}
 
-          <Stack.Screen name="ProductInfo">
+          {/* <Stack.Screen name="ProductInfo">
               {(props) => <ProductInfoScreen {...props} test={test} />}
-          </Stack.Screen>
+          </Stack.Screen> */}
 
           <Stack.Screen name="ScanScreen"
           //  component={ScanScreen}
@@ -118,7 +117,8 @@ function App() {
               fontWeight: 'bold',
             },
           }}>
-              {(props) => <ScanScreen {...props}/>}
+              {() => <ScanScreen/>}
+              {/* {(props) => <ScanScreen {...props} setCode={setCode}/>} */}
           </Stack.Screen>
       </Stack.Navigator>    
     </NavigationContainer>

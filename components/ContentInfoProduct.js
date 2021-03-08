@@ -6,6 +6,7 @@ import Scan from "../components/Scan";
 import { Entypo } from '@expo/vector-icons';
 
 const ContentInfoProduct = ({data}) => {
+  
     return(
         <View style={styles.container}>
             <View style={styles.content_info}>
@@ -29,7 +30,7 @@ const ContentInfoProduct = ({data}) => {
         <Scan/>
      </View>
     )
-}
+  }
 export default ContentInfoProduct;
 
 const styles = StyleSheet.create({

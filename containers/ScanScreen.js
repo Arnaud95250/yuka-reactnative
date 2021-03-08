@@ -1,27 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { BarCodeScanner } from 'expo-barcode-scanner';
-import { ScrollView } from 'react-native-gesture-handler';
-import axios from 'axios';
-
 import { useNavigation } from "@react-navigation/core";
-import * as RootNavigation from './path/to/RootNavigation.js';
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from 'axios';
 
 import ContentInfoScanned from "../components/ContentInfoScanned";
 
-
-
-
-
-const ScanScreen = (props) => {
+const ScanScreen = () => {
   const [hasPermission, setHasPermission] = useState(null);
-  const navigation = useNavigation();
   const [scanned, setScanned] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState("");
   const [errorMessages, setErrorMessages] = useState(false);
-
-
+  const [codeBar,setCodeBar] = useState([]); 
+  
+  
+  const setCode = async (data) => {
+      if (data) {
+        const newProduct =[...codeBar];
+        newProduct.push(data);
+        AsyncStorage.setItem("codebar", JSON.stringify(newProduct));
+        console.log(newProduct);
+      } else{ 
+        AsyncStorage.removeItem("codebar");
+        setCodeBar(null);
+      }
+    };
+  
     //Demande la permission d'acceder l'appareil photo de l'utilisateur
     useEffect(() => {
       (async () => {
@@ -33,13 +39,13 @@ const ScanScreen = (props) => {
     const handleBarCodeScanned = async({ type, data }) => {
       setScanned(true);
       setIsLoading(true);
-      
+
       const fetchData = async () => {
           try{  
             const response = await axios.get(`https://world.openfoodfacts.org/api/v0/product/${data}.json`);
-              setData(response.data)
+              setCode(data);
+              setData(response.data);
               setIsLoading(false);
-              navigation.navigate("ProductScreen", {productScanned: data});
           } 
           catch (error){
               console.log(error.message);
