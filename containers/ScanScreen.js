@@ -11,22 +11,22 @@ const ScanScreen = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState("");
+  const [infoData, setInfoData] = useState("");
   const [errorMessages, setErrorMessages] = useState(false);
-  const [codeBar,setCodeBar] = useState([]); 
+  const [codeBar,setCodeBar] = useState(); 
   
+  const setCode = async (info) => {
+    if (info) {
+      const newProduct =[...codeBar];
+      newProduct.push(info);
+      AsyncStorage.setItem("datacodebar", JSON.stringify(newProduct));
+      console.log(newProduct);
+    } else{ 
+      AsyncStorage.removeItem("datacodebar");
+      setCodeBar(null);
+    }
+  };
   
-  const setCode = async (data) => {
-      if (data) {
-        const newProduct =[...codeBar];
-        newProduct.push(data);
-        AsyncStorage.setItem("codebar", JSON.stringify(newProduct));
-        console.log(newProduct);
-      } else{ 
-        AsyncStorage.removeItem("codebar");
-        setCodeBar(null);
-      }
-    };
   
     //Demande la permission d'acceder l'appareil photo de l'utilisateur
     useEffect(() => {
@@ -43,9 +43,9 @@ const ScanScreen = () => {
       const fetchData = async () => {
           try{  
             const response = await axios.get(`https://world.openfoodfacts.org/api/v0/product/${data}.json`);
-              setCode(data);
-              setData(response.data);
-              setIsLoading(false);
+              setCodeBar(response.data); // Je stock les datas dans mon state setCodeBar et les enregistre dans mon smartphone avec AsyncStorage
+              setInfoData(response.data); // Je stock les datas scanné et les affiches dans (scanScreen.js). 
+              setIsLoading(false); // je passe isLoading à false et affiche le contenue recupéré.
           } 
           catch (error){
               console.log(error.message);
@@ -53,7 +53,6 @@ const ScanScreen = () => {
       };
       fetchData();   
     };
-
 
     return( 
       isLoading ? (
@@ -66,7 +65,7 @@ const ScanScreen = () => {
       ) : (
         <View style={styles.info_product}>
           {scanned && !errorMessages ? (
-            <ContentInfoScanned data={data}/>
+            <ContentInfoScanned data={infoData}/>
           ) : (
           scanned && errorMessages && <Text>Produit inconnu</Text>
         )}
@@ -92,33 +91,3 @@ const styles = StyleSheet.create({
     paddingTop: 20
   },
 })
-
-        //   const fetchData = async () => {
-        //     try{  
-        //       const response = await axios.get(`https://world.openfoodfacts.org/api/v0/product/${data}.json`);
-        //         // console.log(response.data);
-        //         // console.log(data);
-        //         setData(response.data)
-        //         setIsLoading(false);
-        //         // navigation.push("Product", {productScanned: data});
-        //     } catch (error){
-        //         console.log(error.message);
-        //     }
-        // };
-        // fetchData(); 
-
-
-        // <View style={styles.container}>
-        //   <BarCodeScanner
-        //     onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-        //     style={StyleSheet.absoluteFillObject}
-        //   />
-        //   {scanned && <View style={{alignItems: "center", marginTop: 350}}>
-        //     <TouchableOpacity style={styles.button} 
-        //       onPress={() =>
-        //         navigation.navigate("ProductScreen", {test: "data"})
-        //       }>
-        //       <Text>test props product info</Text>
-        //     </TouchableOpacity> 
-        //   </View>}
-        // </View>

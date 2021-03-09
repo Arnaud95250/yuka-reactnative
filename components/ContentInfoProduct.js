@@ -6,7 +6,6 @@ import Scan from "../components/Scan";
 import { Entypo } from '@expo/vector-icons';
 
 const ContentInfoProduct = ({data}) => {
-  
     return(
         <View style={styles.container}>
             <View style={styles.content_info}>
@@ -25,7 +24,6 @@ const ContentInfoProduct = ({data}) => {
                     <Text style={styles.timer}>Il y a 19 heurs</Text>
                     </View>
                 </View>
-            {/* </View> */}
             </View>
         <Scan/>
      </View>

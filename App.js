@@ -6,11 +6,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/core";
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-// import { createDrawerNavigator } from '@react-navigation/drawer';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialTopTabNavigator();
-// const Drawer = createDrawerNavigator ( ) ; 
 
 //@expo/vector-icons@12.0.3 ==> https://icons.expo.fyi/  css
 import colors from "./assets/colors";
@@ -92,14 +90,6 @@ function App() {
             </Tab.Navigator>
             )}
           </Stack.Screen>
-
-          {/* <Stack.Screen name="ProductScreen">
-              {(props)=><ProductScreen {...props} setCode={setCode}/>}
-          </Stack.Screen> */}
-
-          {/* <Stack.Screen name="ProductScreen">
-              {(props) => <ProductScreen {...props} test={test} />}
-          </Stack.Screen> */}
 
           {/* <Stack.Screen name="ProductInfo">
               {(props) => <ProductInfoScreen {...props} test={test} />}

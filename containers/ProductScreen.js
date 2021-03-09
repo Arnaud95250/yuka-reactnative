@@ -1,86 +1,51 @@
 import React, { useState, useEffect } from 'react';
 import {Text, View, StyleSheet, Image, SafeAreaView, FlatList} from "react-native";
-import { useNavigation } from "@react-navigation/core";
-import { useRoute } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from 'axios';
 
 //Components
 import Scan from "../components/Scan";
+
+//Containers
 import ContentInfoProduct from "../components/ContentInfoProduct";
-import { Entypo } from '@expo/vector-icons';
 
 const ProductScreen = (props) => {
     const [data, setData] = useState();
     const [isLoading, setIsLoading] = useState(true);
-    const [product, setProduct] = useState([])
-    const params = useRoute();
-
-    
 
     useEffect(() => {
       const fetchData = async () => {
-        try {       
-          const keyProduct = await AsyncStorage.getItem("codebar");
-          // console.log(keyProduct);
-         
-          const response = await axios.get(`https://world.openfoodfacts.org/api/v0/product/${keyProduct}.json`);
-          setData(response.data);
-
-          // console.log(response.data);
-          setData(response.data);
+        try {
+          const productScanned = await AsyncStorage.getItem("datacodebar");
+          const infoStocked = JSON.parse(productScanned);
+          // console.log(infoStocked);
+          
+          setData(infoStocked);
           setIsLoading(false);
-          // })
         } catch (err) {
           console.log(err.message);
         }
       }
       fetchData();
-    }, [params.productScanned]);
+    }, []);
 
 
     return(
       <SafeAreaView style={styles.container_product}>
-     {isLoading ?(
-       <View  style={styles.container_product}>
-          <Image style={styles.image} source={require('../assets/home00Icon.png')}/>
-          <Scan/>
-       </View>
-       ) : ( 
-        
-        // <ContentInfoProduct data={data}/>
-
-        <FlatList
-          data={data}
-          renderItem={({ item }) => {
-          return (           
-              <View style={styles.container}>
-                <View style={styles.content_info}>
-                  <View style={styles.content_img}>
-                      <Image style={styles.img} source={{ uri: item.product.image_url}}/>
-                  </View>
-                  <View style={styles.info}>
-                      <Text style={styles.title}>{item.product.brands}</Text>
-                      <Text style={styles.title_info}>{item.product.product_name}</Text>
-                      <View style={styles.badge}>
-                      <Badge/>
-                      <Text style={styles.quality}>Excellent</Text>
-                      </View>
-                      <View style={styles.content_timer}>
-                      <Entypo name="back-in-time" size={16} color="rgb(105,105,105)" />
-                      <Text style={styles.timer}>Il y a 19 heurs</Text>
-                      </View>
-                  </View>
+        {isLoading ?(
+          <View  style={styles.container_product}>
+              <Image style={styles.image} source={require('../assets/home00Icon.png')}/>
+              <Scan/>
+          </View>
+          ) : ( 
+            data.map((elem, index) => { //Je boucle sur l'ensemble de mon tableau de produit qui on été push au scanne de l'article dans (ScanScreen.js) 
+              return(
+                <View key={index}> {/*je donne un indice a chacun de mes produit blouclé*/}
+                  <ContentInfoProduct data={elem}/> {/*j'affiche les informations produit*/}
                 </View>
-                  <Scan/>
-              </View>
-               )
-              }}
-              keyExtractor={(item) => item.code}
-            >
-            </FlatList>
-        )}
-        <Scan/>
+              )
+            })
+          )}
+            <Scan/>
       </SafeAreaView>
         )
       }
@@ -169,6 +134,45 @@ const styles = StyleSheet.create({
 //   width: 200,
 // }, */}
 
+
+
+// REQUETE**************************************************
+// const response = await axios.get(`https://world.openfoodfacts.org/api/v0/product/${keyProduct}.json`);
 // const response = await axios.get(`https://world.openfoodfacts.org/api/v0/product/${props.route.params.productScanned}.json`);
 // const response = await axios.get(`https://world.openfoodfacts.org/api/v0/product/${params.params.productScanned}.json`);
 // const response = await axios.get(`https://world.openfoodfacts.org/api/v0/product/${data}.json`);
+// REQUETE**************************************************
+
+// FLATLIST***************************************************
+
+// <FlatList
+//   data={data}
+//   renderItem={({ item }) => {
+//   return (           
+//       <View style={styles.container}>
+//         <View style={styles.content_info}>
+//           <View style={styles.content_img}>
+//               <Image style={styles.img} source={{ uri: item.product.image_url}}/>
+//           </View>
+//           <View style={styles.info}>
+//               <Text style={styles.title}>{item.product.brands}</Text>
+//               <Text style={styles.title_info}>{item.product.product_name}</Text>
+//               <View style={styles.badge}>
+//               <Badge/>
+//               <Text style={styles.quality}>Excellent</Text>
+//               </View>
+//               <View style={styles.content_timer}>
+//               <Entypo name="back-in-time" size={16} color="rgb(105,105,105)" />
+//               <Text style={styles.timer}>Il y a 19 heurs</Text>
+//               </View>
+//           </View>
+//         </View>
+//           <Scan/>
+//       </View>
+//        )
+//       }}
+//       keyExtractor={(item) => item.code}
+//     >
+//     </FlatList>
+        
+// FLATLIST***************************************************
