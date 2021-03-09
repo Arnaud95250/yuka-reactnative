@@ -13,14 +13,37 @@ const ScanScreen = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [infoData, setInfoData] = useState("");
   const [errorMessages, setErrorMessages] = useState(false);
-  const [codeBar,setCodeBar] = useState(); 
   
+
+
   const setCode = async (info) => {
     if (info) {
-      const newProduct =[...codeBar];
-      newProduct.push(info);
-      AsyncStorage.setItem("datacodebar", JSON.stringify(newProduct));
-      console.log(newProduct);
+      const stored = await AsyncStorage.getItem("datacodebar");
+
+        if(stored === null){
+          const valueStock = [info];
+          AsyncStorage.setItem("datacodebar", JSON.stringify(valueStock));
+        } else {
+          const infoTab = await AsyncStorage.getItem("datacodebar");
+          const tab = JSON.parse(infoTab);
+          
+          // verif si le produit existe
+          for (let i = 0; i < tab.length; i++) {
+            console.log(tab[i].code)
+            if(tab[i].code === info.code){
+              alert("existe déjà");    
+              // return;          
+            } else {
+              alert("le produit n\'existe pas");
+              // tab.push(info);
+              // AsyncStorage.setItem("datacodebar", JSON.stringify(tab));
+            }
+          }
+          
+            // const infoStocked = JSON.parse(stored);
+            // infoStocked.push(info);
+            // AsyncStorage.setItem("datacodebar", JSON.stringify(infoStocked));
+        }
     } else{ 
       AsyncStorage.removeItem("datacodebar");
       setCodeBar(null);
@@ -43,7 +66,7 @@ const ScanScreen = () => {
       const fetchData = async () => {
           try{  
             const response = await axios.get(`https://world.openfoodfacts.org/api/v0/product/${data}.json`);
-              setCodeBar(response.data); // Je stock les datas dans mon state setCodeBar et les enregistre dans mon smartphone avec AsyncStorage
+              setCode(response.data); // Je stock les datas dans mon state setCodeBar et les enregistre dans mon smartphone avec AsyncStorage
               setInfoData(response.data); // Je stock les datas scanné et les affiches dans (scanScreen.js). 
               setIsLoading(false); // je passe isLoading à false et affiche le contenue recupéré.
           } 

@@ -7,6 +7,7 @@ import Scan from "../components/Scan";
 
 //Containers
 import ContentInfoProduct from "../components/ContentInfoProduct";
+import { ScrollView } from 'react-native-gesture-handler';
 
 const ProductScreen = (props) => {
     const [data, setData] = useState();
@@ -31,20 +32,22 @@ const ProductScreen = (props) => {
 
     return(
       <SafeAreaView style={styles.container_product}>
+        <ScrollView>
         {isLoading ?(
           <View  style={styles.container_product}>
               <Image style={styles.image} source={require('../assets/home00Icon.png')}/>
               <Scan/>
           </View>
           ) : ( 
-            data.map((elem, index) => { //Je boucle sur l'ensemble de mon tableau de produit qui on été push au scanne de l'article dans (ScanScreen.js) 
+            data.map((elem, index) => { // Je boucle sur l'ensemble de mon tableau de produit qui on été push au scanne de l'article dans (ScanScreen.js) 
               return(
-                <View key={index}> {/*je donne un indice a chacun de mes produit blouclé*/}
-                  <ContentInfoProduct data={elem}/> {/*j'affiche les informations produit*/}
+                <View key={index}> 
+                  <ContentInfoProduct data={elem}/> 
                 </View>
               )
             })
           )}
+          </ScrollView>
             <Scan/>
       </SafeAreaView>
         )
@@ -64,58 +67,9 @@ const styles = StyleSheet.create({
       resizeMode: "contain",
       position: "absolute"
     },
-
-
-    container:{
-      flex:1, 
-      // alignItems: "center"
-  },
-  content_info:{
-      height: 150,
-      width: "90%",
-      padding:10,
-      flexDirection:"row",
-      borderBottomWidth: 1,
-    },
-    content_img:{
-      width:100,
-    },
-    img:{
-      width:70,
-      height: 130,
-      resizeMode: "contain",
-      alignItems: "flex-start",
-    },
-    title:{
-      fontSize: 22
-    },
-    title_info:{
-      fontSize: 16, 
-      color: "rgb(105,105,105)"
-    },
-    quality:{
-      fontSize: 12, 
-      color: "rgb(105,105,105)"
-    },
-    badge:{
-      flexDirection: "row",
-      alignItems: "center",
-      marginTop: 10,
-    },
-    content_timer:{
-      marginTop: 10,
-      flexDirection: "row",
-      alignItems: "center",
-    },
-    timer:{
-      fontSize: 12, 
-      marginLeft: 10, 
-      color: "rgb(105,105,105)"
-    }
-    
   });
-  
-  
+  {/* je donne un indice a chacun de mes produit blouclé */}
+  {/* j'affiche les informations produit*/}
   
 {/* <View style={{alignItems: "center", marginTop: 350}}>
   <TouchableOpacity style={styles.button} 
