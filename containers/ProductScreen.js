@@ -1,27 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import {Text, View, StyleSheet, Image, SafeAreaView, FlatList} from "react-native";
+import { View, StyleSheet, Image, SafeAreaView, FlatList, TouchableOpacity, RefreshControl} from "react-native";
+import { ScrollView } from 'react-native-gesture-handler';
+import { useNavigation } from "@react-navigation/core";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-//Components
+//Components*******************************************
 import Scan from "../components/Scan";
 
-//Containers
+//Containers*******************************************
 import ContentInfoProduct from "../components/ContentInfoProduct";
-import { ScrollView } from 'react-native-gesture-handler';
+
+//@expo/vector-icons@12.0.3 ==> https://icons.expo.fyi/
+import { Ionicons } from '@expo/vector-icons';
 
 const ProductScreen = (props) => {
     const [data, setData] = useState();
-    const [isLoading, setIsLoading] = useState(true);
+    const navigation = useNavigation();
+    const [refreshing, setRefreshing] = React.useState(false);
 
     useEffect(() => {
       const fetchData = async () => {
         try {
           const productScanned = await AsyncStorage.getItem("datacodebar");
-          const infoStocked = JSON.parse(productScanned);
-          // console.log(infoStocked);
-          
+          const infoStocked = JSON.parse(productScanned); 
           setData(infoStocked);
-          setIsLoading(false);
         } catch (err) {
           console.log(err.message);
         }
@@ -29,29 +30,56 @@ const ProductScreen = (props) => {
       fetchData();
     }, []);
 
+     // Function Je supprime un produit de la liste productScreen mais il est supprimé dans product je supprime également des favoris
+    const deleteProduct = async (params) => {     
+      const index = data.indexOf(params);
+        data.splice(params, 1);
+        await AsyncStorage.setItem("datacodebar", JSON.stringify(data));
+        await AsyncStorage.setItem("favoritesstocked", JSON.stringify(data));
+      console.log(index);
+    }
 
+    // Je scroll vers le bas pour refresh la page
+    const onRefresh = React.useCallback(() => {
+      setRefreshing(true);
+      setTimeout((() => setRefreshing(false)),1000);
+    }, []);
+
+    // Return qui permet d'afficher mon contenue 
     return(
-      <SafeAreaView style={styles.container_product}>
-        <ScrollView>
-        {isLoading ?(
-          <View  style={styles.container_product}>
+      <SafeAreaView style={styles.container_product} >
+        <View>
+          <Image style={styles.image} source={require('../assets/home00Icon.png')}/>
+          <ScrollView 
+          contentContainerStyle={styles.scrollView} 
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        >
+        {/* <ScrollView> */}
+        {!data ? (
+            <View>
               <Image style={styles.image} source={require('../assets/home00Icon.png')}/>
-              <Scan/>
-          </View>
-          ) : ( 
+            </View>
+          ) : (
             data.map((elem, index) => { // Je boucle sur l'ensemble de mon tableau de produit qui on été push au scanne de l'article dans (ScanScreen.js) 
               return(
-                <View key={index}> 
-                  <ContentInfoProduct data={elem}/> 
+                // key qui correspond à l'indice de chaque éléments de mon tableau d'objet
+                <View key={index} style={styles.container}> 
+                  <TouchableOpacity style={{width: "90%"}} onPress={() => navigation.navigate("ProductInfo", elem={elem})}>
+                      <ContentInfoProduct data={elem}/> 
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => deleteProduct(index)} style={styles.trash}>
+                    <Ionicons name="ios-trash-outline" size={24} color="rgb(80, 196, 130)" />
+                  </TouchableOpacity>
                 </View>
-              )
-            })
+                )
+              })
           )}
           </ScrollView>
             <Scan/>
+          </View>
       </SafeAreaView>
-        )
-      }
+    )
+  }
       
 export default ProductScreen;
 
@@ -65,30 +93,25 @@ const styles = StyleSheet.create({
       height: "93%",
       width: "100%",
       resizeMode: "contain",
-      position: "absolute"
+      position: "absolute",
     },
+    container:{
+      flexDirection: "row",
+      borderWidth: 1,
+      margin: 10,
+      borderRadius:10,
+      backgroundColor: "rgb(240, 240, 240)"
+    },
+    scrollView: {
+      flex: 1,
+      flexDirection: "column"
+    },
+    trash:{
+      width: "100%",
+      alignSelf: "center"
+    }
   });
-  {/* je donne un indice a chacun de mes produit blouclé */}
-  {/* j'affiche les informations produit*/}
   
-{/* <View style={{alignItems: "center", marginTop: 350}}>
-  <TouchableOpacity style={styles.button} 
-    onPress={() =>
-      navigation.navigate("ProductInfo")
-    }>
-    <Text>test props product info</Text>
-  </TouchableOpacity> 
-</View> */}
-{/* 
-// button:{
-//   alignItems: "center",
-//   backgroundColor: "red",
-//   padding: 10,
-//   borderRadius:10,
-//   width: 200,
-// }, */}
-
-
 
 // REQUETE**************************************************
 // const response = await axios.get(`https://world.openfoodfacts.org/api/v0/product/${keyProduct}.json`);

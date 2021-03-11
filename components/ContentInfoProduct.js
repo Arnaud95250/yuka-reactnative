@@ -1,7 +1,6 @@
 import React from 'react';
 import {Text, View, StyleSheet, Image} from "react-native";
 import Badge from "../components/Badge";
-import Scan from "../components/Scan";
 
 import { Entypo } from '@expo/vector-icons';
 
@@ -13,8 +12,8 @@ const ContentInfoProduct = ({data}) => {
                     <Image style={styles.img} source={{ uri: data.product.image_url}}/>
                 </View>
                 <View style={styles.info}>
-                    <Text style={styles.title}>{data.product.brands}</Text>
-                    <Text style={styles.title_info}>{data.product.product_name}</Text>
+                    <Text style={styles.title} numberOfLines={1}>{data.product.brands}</Text>
+                    <Text style={styles.title_info} numberOfLines={1}>{data.product.product_name}</Text>
                     <View style={styles.badge}>
                     <Badge/>
                     <Text style={styles.quality}>Excellent</Text>
@@ -24,6 +23,7 @@ const ContentInfoProduct = ({data}) => {
                     <Text style={styles.timer}>Il y a 19 heurs</Text>
                     </View>
                 </View>
+                  
             </View>
      </View>
     )
@@ -39,8 +39,11 @@ const styles = StyleSheet.create({
         height: 150,
         width: "90%",
         padding:10,
-        flexDirection:"row",
-        borderBottomWidth: 1,
+        flexDirection:"row",   
+      },
+      info:{
+        width: "70%"
+        
       },
       content_img:{
         width:100,
@@ -52,11 +55,13 @@ const styles = StyleSheet.create({
         alignItems: "flex-start",
       },
       title:{
-        fontSize: 22
+        fontSize: 22,
+        overflow: "hidden",
       },
       title_info:{
         fontSize: 16, 
-        color: "rgb(105,105,105)"
+        color: "rgb(105,105,105)",
+        overflow: "hidden",
       },
       quality:{
         fontSize: 12, 
@@ -76,5 +81,5 @@ const styles = StyleSheet.create({
         fontSize: 12, 
         marginLeft: 10, 
         color: "rgb(105,105,105)"
-      }
+      },
   });

@@ -15,10 +15,10 @@ const ScanScreen = () => {
   const [errorMessages, setErrorMessages] = useState(false);
   
 
-
   const setCode = async (info) => {
     if (info) {
       const stored = await AsyncStorage.getItem("datacodebar");
+        console.log(stored);
 
         if(stored === null){
           const valueStock = [info];
@@ -26,27 +26,27 @@ const ScanScreen = () => {
         } else {
           const infoTab = await AsyncStorage.getItem("datacodebar");
           const tab = JSON.parse(infoTab);
-          
+          let estCeQueProduitExiste = false;
           // verif si le produit existe
           for (let i = 0; i < tab.length; i++) {
-            console.log(tab[i].code)
-            if(tab[i].code === info.code){
-              alert("existe déjà");    
-              // return;          
-            } else {
-              alert("le produit n\'existe pas");
-              // tab.push(info);
-              // AsyncStorage.setItem("datacodebar", JSON.stringify(tab));
-            }
+           if(tab[i].code === info.code){
+             estCeQueProduitExiste = true;
+           }
+          }
+          if(estCeQueProduitExiste === false){
+            tab.push(info);
+            AsyncStorage.setItem("datacodebar", JSON.stringify(tab));
           }
           
-            // const infoStocked = JSON.parse(stored);
-            // infoStocked.push(info);
-            // AsyncStorage.setItem("datacodebar", JSON.stringify(infoStocked));
+
+          
+          // const infoStocked = JSON.parse(stored);
+          // infoStocked.push(info);
+          // AsyncStorage.setItem("datacodebar", JSON.stringify(infoStocked));
         }
-    } else{ 
-      AsyncStorage.removeItem("datacodebar");
-      setCodeBar(null);
+    } 
+    else{ 
+      alert('Aucun code bar trouvé')
     }
   };
   
